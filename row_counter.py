@@ -12,13 +12,13 @@ unresolved_inn = []
 key_num = []
 
 # Записываем данные конкретного стобца в список
-list_df1 = df1[3].tolist()
-list_df2 = df2[3].tolist()
+list_df1 = df1[5].tolist()
+list_df2 = df2[5].tolist()
 for inn in list_df1:
     if inn not in list_df2:
         unresolved_inn.append(inn)
 
-match_cell = df1.loc[df1[3].isin(unresolved_inn)]
+match_cell = df1.loc[df1[5].isin(unresolved_inn)]
 df2['Статус'] = '-'
 df2 = df2.append(match_cell, ignore_index=True)
 df2['Статус'] = df2['Статус'].fillna('Новый')
