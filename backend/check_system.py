@@ -29,7 +29,7 @@ def check_directory():
 def check_source_data():
     """Проверка директории "source_data" на наличие исходных файлов. """
     directory = r'C:\source_data'
-    source_files = ['resurs.xlsx', 'main.xlsx']
+    source_files = ['re.xlsx', 'main.xlsx']
     list_of_dir = []
     list_of_ideal = []
     files = os.listdir(directory)

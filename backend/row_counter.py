@@ -1,3 +1,5 @@
+from datetime import date
+
 import pandas as pd
 
 
@@ -11,7 +13,7 @@ def row_merger(main_path, resurse_path, sheet_name, *, indx_colomn: int = 5):
     :param indx_colomn: Колонка с уникальными значениями по которой будут отбираться повторы при слиянии
     :return: "текст"
     """
-
+    current_datetime = date.today()
     unresolved_inn = []
     try:
         # читаем данные из двух файлов эксель
@@ -29,10 +31,10 @@ def row_merger(main_path, resurse_path, sheet_name, *, indx_colomn: int = 5):
         main_df['Статус'] = '-'
         main_df = main_df.append(match_cell, ignore_index=True)
         main_df['Статус'] = main_df['Статус'].fillna('Новый')
-        main_df.to_excel(r'C:\generation_results\fin.xlsx',
+        main_df.to_excel(fr'C:\generation_results\fin_{current_datetime.strftime("%d.%m.%Y")}.xlsx',
                          index=False)
     except Exception as error:
-        return 'Нет файлов для слияния!'
+        return error
     return 'Программа выполнена'
 
 # Работа с несколькими файлами
