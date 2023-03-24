@@ -9,7 +9,6 @@ customtkinter.set_appearance_mode('light')
 customtkinter.set_default_color_theme('blue')
 
 
-
 def main():
     root = customtkinter.CTk()
     root.geometry('350x300')
