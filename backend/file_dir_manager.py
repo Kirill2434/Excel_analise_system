@@ -74,7 +74,7 @@ def replace_files(path):
                 duplicate_files.append(key_file)
         if len(duplicate_files) > 0:
             print(duplicate_files)
-            return 'Есть повторы! Нельзя копировать файлы.'
+            return 'Есть повторы! Нельзя перемещать файлы.'
         for excel_path in Path(path).glob(r'**\*.xlsx'):
             shutil.copy2(excel_path, fr'C:\{group_dir}\{xlsx_file}')
         for excel_path in Path(path).glob(r'**\*.xls'):
@@ -84,5 +84,5 @@ def replace_files(path):
     return 'Файлы скопированы.'
 
 
-# print(rename_file_by_folder_name(file_path))
-# print(replace_files(file_path))
+print(rename_file_by_folder_name(file_path))
+print(replace_files(file_path))
