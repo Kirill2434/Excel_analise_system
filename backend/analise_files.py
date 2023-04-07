@@ -4,7 +4,7 @@ path = r'C:\generation_results\new.xlsx'
 resurse_path = r'C:\generation_results\fin.xlsx'
 
 
-def analise_column(file, column_inx, min_row):
+def analise_and_editing_columns(file, column_inx, min_row):
     """
     Функция обрабатывает заданные колонки, находит "0", не целочисленных значений
     и текст, затем удаляет обнаруженные несоответвия и округляя числа типа float.
@@ -48,4 +48,4 @@ def analise_column(file, column_inx, min_row):
     return 'Проверка закончена'
 
 
-print(analise_column(resurse_path, [12, 13, 14, 15], 2))
+print(analise_and_editing_columns(resurse_path, [12, 13, 14, 15], 2))

@@ -84,5 +84,5 @@ def replace_files(path):
     return 'Файлы скопированы.'
 
 
-print(rename_file_by_folder_name(file_path))
+# print(rename_file_by_folder_name(file_path))
 print(replace_files(file_path))
