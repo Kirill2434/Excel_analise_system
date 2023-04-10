@@ -15,7 +15,7 @@ file_path = glob.glob(r'C:\Сгруппированные файлы\xlsx фай
 
 
 def file_merge_new(path, sheet_name: str = 'Лист1'):
-    """Функция объединяет файлы ориентируясб на числовую шапку файла.
+    """Функция объединяет файлы ориентируясь на числовую шапку файла.
 
     :param path: путь к файлам
     :param sheet_name: имя лста
@@ -40,7 +40,9 @@ def file_merge_new(path, sheet_name: str = 'Лист1'):
                 single_file_dictionary[row_col_ind[1]] = row
                 for cell_k, cell_v in single_file_dictionary.items():
                     single_file_dictionary[row_col_ind[1]] = cell_v
-                    df = pd.DataFrame.from_dict(single_file_dictionary, orient='index')
+                    df = pd.DataFrame.from_dict(single_file_dictionary,
+                                                orient='index',
+                                                dtype='str')
                     df['Файл источник'] = file_name
                     # формируем список с данными одного файла
                     single_file_list.append(df)
@@ -53,7 +55,7 @@ def file_merge_new(path, sheet_name: str = 'Лист1'):
     final_mer.to_excel(r'C:\generation_results\НБО_свод.xlsx',
                        sheet_name='Финал',
                        index=False)
-    return 'Слияние выполнено'
+    return 'Слияние выполнено!'
 
 
 print(file_merge_new(file_path))

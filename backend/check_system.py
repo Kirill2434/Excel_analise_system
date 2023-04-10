@@ -131,10 +131,9 @@ def cheak_head_of_table(paths, sum_of_head: int, *, sheet_name: str = 'Лист1
         return 'Есть не читаеые файлы!'
     if len(final_dict) != 0:
         record_to_excel(final_dict, 'Head_check_report', 'Ошибка в шапке')
-        return f'Проверка выполнена! См отчет в Head_check_report'
+        return f'Проверка выполнена, есть ошибки! См отчет в Head_check_report'
     else:
         return f'Проверка выполнена! Ошибок нет.'
 
 
-# reault = cheak_head_of_table(all_files, 36)
-# print(reault)
+# print(cheak_head_of_table(all_files, 36))
