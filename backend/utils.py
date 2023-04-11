@@ -4,11 +4,7 @@ import glob
 import openpyxl as op
 import pandas as pd
 from pathlib import Path
-
-from openpyxl.workbook import Workbook
 from pandas import ExcelWriter
-
-from settings import CHECK_REPORT_FILE, CHECK_REPORT_N_FILE
 
 
 def record_to_excel(obj, report_name, sheet_name):
@@ -21,51 +17,51 @@ def record_to_excel(obj, report_name, sheet_name):
     """
 
     # если файл-отчет отсувует в папке, то записываем первый файл-отчет
-    # try:
-    if os.path.exists(fr'C:\generation_results\{report_name}.xlsx') is False:
-        try:
-            with ExcelWriter(fr'C:\generation_results\{report_name}.xlsx',
-                             engine='openpyxl') as writer:
-                # проверяем тип объекта
-                # либо список
-                if isinstance(obj, list):
-                    df = pd.DataFrame(obj).transpose()
-                    df.to_excel(writer, sheet_name=sheet_name, index=False)
-                # либо словарь
-                if isinstance(obj, dict):
-                    df = pd.DataFrame.from_dict(obj, orient='index')
-                    df = df.transpose()
-                    df.to_excel(writer, sheet_name=sheet_name, index=False)
-        except IndexError:
-            obj.to_excel(fr'C:\generation_results\{report_name}.xlsx',
-                         sheet_name=sheet_name,
-                         index=False)
-    # когда файл уже есть:
-    else:
-        # счиаем кол-во файлов-отчетов в папке
-        sum_of_files = len(list(glob.glob(fr'C:\generation_results\{report_name}??.xlsx')))
-        num = sum_of_files + 1
-        # создаем новое имя файла с учетом нового номера
-        new_file_name = fr'C:\generation_results\{report_name}' + '_' + str(num) + '.xlsx'
-        try:
-            with ExcelWriter(new_file_name,
-                             engine='openpyxl') as writer:
-                # проверяем тип объекта
-                # либо список
-                if isinstance(obj, list):
-                    df = pd.DataFrame(obj).transpose()
-                    df.to_excel(writer, sheet_name=sheet_name, index=False)
-                # либо словарь
-                elif isinstance(obj, dict):
-                    df = pd.DataFrame.from_dict(obj, orient='index')
-                    df = df.transpose()
-                    df.to_excel(writer, sheet_name=sheet_name, index=False)
-        except IndexError:
-            obj.to_excel(fr'C:\generation_results\{report_name}.xlsx',
-                         sheet_name=sheet_name,
-                         index=False)
-    # except Exception as error:
-    #     return error
+    try:
+        if os.path.exists(fr'C:\generation_results\{report_name}.xlsx') is False:
+            try:
+                with ExcelWriter(fr'C:\generation_results\{report_name}.xlsx',
+                                 engine='openpyxl') as writer:
+                    # проверяем тип объекта
+                    # либо список
+                    if isinstance(obj, list):
+                        df = pd.DataFrame(obj).transpose()
+                        df.to_excel(writer, sheet_name=sheet_name, index=False)
+                    # либо словарь
+                    if isinstance(obj, dict):
+                        df = pd.DataFrame.from_dict(obj, orient='index')
+                        df = df.transpose()
+                        df.to_excel(writer, sheet_name=sheet_name, index=False)
+            except IndexError:
+                obj.to_excel(fr'C:\generation_results\{report_name}.xlsx',
+                             sheet_name=sheet_name,
+                             index=False)
+        # когда файл уже есть:
+        else:
+            # счиаем кол-во файлов-отчетов в папке
+            sum_of_files = len(list(glob.glob(fr'C:\generation_results\{report_name}??.xlsx')))
+            num = sum_of_files + 1
+            # создаем новое имя файла с учетом нового номера
+            new_file_name = fr'C:\generation_results\{report_name}' + '_' + str(num) + '.xlsx'
+            try:
+                with ExcelWriter(new_file_name,
+                                 engine='openpyxl') as writer:
+                    # проверяем тип объекта
+                    # либо список
+                    if isinstance(obj, list):
+                        df = pd.DataFrame(obj).transpose()
+                        df.to_excel(writer, sheet_name=sheet_name, index=False)
+                    # либо словарь
+                    elif isinstance(obj, dict):
+                        df = pd.DataFrame.from_dict(obj, orient='index')
+                        df = df.transpose()
+                        df.to_excel(writer, sheet_name=sheet_name, index=False)
+            except IndexError:
+                obj.to_excel(fr'C:\generation_results\{report_name}.xlsx',
+                             sheet_name=sheet_name,
+                             index=False)
+    except Exception as error:
+        return error
     return 'Запись в файл выполнена'
 
 

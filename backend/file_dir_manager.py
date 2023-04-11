@@ -3,28 +3,31 @@ import shutil
 from pathlib import Path
 from collections import Counter
 
-
-file_path = r'C:\Приложения регионов'
-group_dir = 'Сгруппированные файлы'
-xlsx_file = 'xlsx файлы'
-xls_files = 'xls файлы'
+from settings import file_path_regions, group_dir, xlsx_file, xls_files
 
 
 def add_hyphen(path):
-    # вывод наименование папок в директории
-    for file_dir in os.listdir(path):
-        # вывод наименование файлов в папках
-        for file_name in os.listdir(fr'{file_path}\{file_dir}'):
-            try:
-                # если '_' отсутвует в начале наименования файла, добавляем '_'
-                if file_name.split('.')[-1] == 'xlsx':
-                    if file_name[0] != '_':
-                        os.rename(fr'{file_path}\{file_dir}\{file_name}',
-                                  fr'{file_path}\{file_dir}\_{file_name}')
-                    else:
-                        pass
-            except Exception as error:
-                return error
+    """Функция добавляет деффис в начале имени файла.
+
+    @param path: путь до папки с файлами
+    """
+    try:
+        # вывод наименование папок в директории
+        for file_dir in os.listdir(path):
+            # вывод наименование файлов в папках
+            for file_name in os.listdir(fr'{file_path_regions}\{file_dir}'):
+                try:
+                    # если '_' отсутвует в начале наименования файла, добавляем '_'
+                    if file_name.split('.')[-1] == 'xlsx':
+                        if file_name[0] != '_':
+                            os.rename(fr'{file_path_regions}\{file_dir}\{file_name}',
+                                      fr'{file_path_regions}\{file_dir}\_{file_name}')
+                        else:
+                            pass
+                except Exception as error:
+                    return error
+    except Exception as error:
+        return f'Ошибка {error} в функции {add_hyphen.__name__}'
 
 
 def rename_file_by_folder_name(path):
@@ -41,23 +44,22 @@ def rename_file_by_folder_name(path):
         # вывод наименование папок в директории
         for file_dir in os.listdir(path):
             # вывод наименование файлов в папках
-            for file_name in os.listdir(fr'{file_path}\{file_dir}'):
+            for file_name in os.listdir(fr'{file_path_regions}\{file_dir}'):
                 try:
                     # если после '.' расширение файла xlsx, то добавляем к имени файл, имя папки
                     if file_name.split('.')[-1] == 'xlsx':
-                        os.rename(fr'{file_path}\{file_dir}\{file_name}',
-                                  fr"{file_path}\{file_dir}\{file_name.split('.')[0]}_{file_dir}.xlsx")
+                        os.rename(fr'{file_path_regions}\{file_dir}\{file_name}',
+                                  fr"{file_path_regions}\{file_dir}\{file_name.split('.')[0]}_{file_dir}.xlsx")
                     # если после '.' расширение файла xls, то добавляем к имени файл, имя папки
                     if file_name.split('.')[-1] == 'xls':
-                        os.rename(fr'{file_path}\{file_dir}\{file_name}',
-                                  fr"{file_path}\{file_dir}\{file_name.split('.')[0]}_{file_dir}.xls")
+                        os.rename(fr'{file_path_regions}\{file_dir}\{file_name}',
+                                  fr"{file_path_regions}\{file_dir}\{file_name.split('.')[0]}_{file_dir}.xls")
                 # если в папке лежит подпапка, то ловим ошибку и добавляем ее в соварь
                 except IndexError as error:
-                    print('Есть ошибка!')
                     miss_files[file_name] = error
                     pass
     except Exception as error:
-        return error
+        return f'Ошибка {error} в функции {rename_file_by_folder_name.__name__}'
     if len(miss_files) == 0:
         pass
     else:
@@ -67,9 +69,9 @@ def rename_file_by_folder_name(path):
 
 def duplicate_region_number():
     """Функция находит повторы файлов в итоговой папке
-    и возвращает наименование повторяющихсярегионов
+    и возвращает наименование повторяющихся регионов
 
-    :return: список
+    @return: список из наименований файлов
     """
 
     duplicate_files = []
@@ -84,7 +86,7 @@ def duplicate_region_number():
             if count_of_repeats > 1:
                 duplicate_files.append(reg_num)
     except Exception as error:
-        return error
+        return f'Ошибка {error} в функции {duplicate_region_number.__name__}'
     return duplicate_files
 
 
@@ -106,7 +108,7 @@ def replace_files(path):
             pass
         for file_dir in os.listdir(path):
             # вывод наименование файлов в папках
-            for file_name in os.listdir(fr'{file_path}\{file_dir}'):
+            for file_name in os.listdir(fr'{file_path_regions}\{file_dir}'):
                 if file_name.split('.')[-1] == 'xlsx':
                     all_files.append(file_name)
         for excel_path in Path(path).glob(r'**\*.xlsx'):
@@ -120,9 +122,9 @@ def replace_files(path):
                 if date_status_file[1] == 'после':
                     os.remove(fr'C:{group_dir}\{xlsx_file}\{file}')
     except Exception as error:
-        return error
-    return 'Файлы скопированы.'
+        return f'Ошибка {error} в функции {replace_files.__name__}'
+    return fr'Файлы скопированы в "C:\{group_dir}".'
 
 
-# print(rename_file_by_folder_name(file_path))
-# print(replace_files(file_path))
+# print(rename_file_by_folder_name(file_path_regions))
+# print(replace_files(file_path_regions))

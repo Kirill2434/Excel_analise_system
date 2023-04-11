@@ -1,24 +1,19 @@
 import os
-from os import path
-import shutil
 
 import pandas as pd
-import openpyxl as op
+
 from pathlib import Path
 from tqdm import tqdm
 
-from settings import CHECK_REPORT_FILE, all_files
 from backend.exeptions import EmptyException
 from backend.utils import record_to_excel, head_of_table
-
-
-group_dir = 'Сгруппированные файлы'
+from settings import all_files
 
 
 def check_directory():
     """Проверка директории на наличие папок source_data и generation_results. """
 
-    directory_list = [fr'C:\source_data', r'C:\generation_results']
+    directory_list = [r'C:\source_data', r'C:\generation_results', r'C:\Приложения регионов']
     result = []
     for directory in directory_list:
         if os.path.exists(directory):
@@ -37,6 +32,9 @@ def check_directory():
             except (FileNotFoundError, FileExistsError):
                 continue
     return 'Все необходимые папки - созданы!'
+
+
+# print(check_directory())
 
 
 def check_source_data():
@@ -61,7 +59,7 @@ def check_source_data():
             else:
                 return f'Нужно исправить: \n{result}'
     except Exception as error:
-        return error
+        return f'Ошибка {error} в функции {check_source_data.__name__}'
     return 'Все файлы прошли проверку'
 
 
@@ -89,7 +87,7 @@ def check_sheets(paths, *, sheet_name: str = 'Лист1'):
             record_to_excel(incorrect_files, 'Sheet_check_report', 'Отчет о листах')
             return f'Проверка выполнена! Есть ошибки, см. отчет в Sheet_check_report.xlsx'
     except Exception as error:
-        return error
+        return f'Ошибка {error} в функции {check_sheets.__name__}'
 
 
 # print(check_sheets(all_files))
@@ -109,7 +107,6 @@ def cheak_head_of_table(paths, sum_of_head: int, *, sheet_name: str = 'Лист1
     unreadable_file = []
     sum_of_head = list(range(1, sum_of_head + 1))
     try:
-
         for file in tqdm(paths):
             df = pd.ExcelFile(file)
             file_name = Path(df).name
