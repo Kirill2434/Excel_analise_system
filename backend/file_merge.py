@@ -6,7 +6,6 @@ from pathlib import Path
 from tqdm import tqdm
 
 from backend.check_system import head_of_table
-from settings import file_path
 
 
 def file_dir_merge(path, sheet_name: str = 'Лист1'):

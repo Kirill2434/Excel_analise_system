@@ -98,7 +98,6 @@ def replace_files(path):
     @param path: путь к папкам с файлами
     @return: возвращает сообщение -> 'Файлы скопированы.' или 'Есть повторы! Нельзя копировать файлы.'
     """
-
     all_files = []
     try:
         if os.path.exists(fr'C:\{group_dir}') is False:

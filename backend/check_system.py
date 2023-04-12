@@ -7,7 +7,6 @@ from tqdm import tqdm
 
 from backend.exeptions import EmptyException
 from backend.utils import record_to_excel, head_of_table
-from settings import all_files
 
 
 def check_directory():
