@@ -1,14 +1,15 @@
+import os
+
 import pandas as pd
 import openpyxl as op
 
 from pathlib import Path
 
-from tqdm import tqdm
-
 from backend.check_system import head_of_table
+from settings import group_dir, xlsx_file
 
 
-def file_dir_merge(path, sheet_name: str = 'Лист1'):
+def file_dir_merge(sheet_name: str = 'Лист1'):
     """Функция объединяет файлы ориентируясь на числовую шапку файла.
 
     :param path: путь к файлам
@@ -18,16 +19,16 @@ def file_dir_merge(path, sheet_name: str = 'Лист1'):
     single_file_list = []
     all_files_list = []
     single_file_dictionary = {}
-    for file in tqdm(path):
+    for file in os.listdir(fr'C:\{group_dir}\{xlsx_file}'):
         try:
-            df = pd.ExcelFile(file)
+            df = pd.ExcelFile(fr'C:\{group_dir}\{xlsx_file}\{file}')
             file_name = Path(df).name
-            head = head_of_table(file, sheet_name)
+            head = head_of_table(fr'C:\{group_dir}\{xlsx_file}\{file}', sheet_name)
         except Exception as error:
             return f'Ошибка: {error}. ' \
                    f'Не получается прочитать файл!'
         for row_col_ind, head in head.items():
-            wb = op.load_workbook(file)
+            wb = op.load_workbook(fr'C:\{group_dir}\{xlsx_file}\{file}')
             # проверяем лист на его корректность
             try:
                 ws = wb[sheet_name]
