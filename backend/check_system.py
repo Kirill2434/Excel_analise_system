@@ -14,7 +14,7 @@ def check_directory():
 
     directory_list = [r'C:\source_data', r'C:\generation_results',
                       r'C:\Приложения регионов', r'C:\Сгруппированные файлы',
-                      r'C:\Сгруппированные файлы\xlsx файлы']
+                      r'C:\Сгруппированные файлы\xlsx файлы', r'C:\Сгруппированные файлы\xls файлы']
     result = []
     for directory in directory_list:
         if os.path.exists(directory):

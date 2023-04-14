@@ -1,102 +1,15 @@
 import tkinter.messagebox
 import customtkinter
-from tkinter.messagebox import showinfo, INFO, OK, showerror
+from tkinter.messagebox import showinfo, INFO, OK, showerror, showwarning
 
 from backend.check_system import check_source_data, check_directory, check_sheets, cheak_head_of_table
-from backend.file_dir_manager import rename_file_by_folder_name, replace_files
+from backend.file_dir_manager import rename_and_replace, clean_dirs
 from backend.file_merge import file_dir_merge
 from backend.row_counter import row_merger
-from settings import resurs_path, main_path, all_files, LEN_OF_HEAD, file_path_regions, group_dir, file_path
-
+from settings import resurs_path, main_path, LEN_OF_HEAD, file_path_regions, group_dir, file_path, xls_files
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
-
-# root = customtkinter.CTk()
-# root.geometry('350x300')
-# root.title('Историчность')
-#
-#
-# def check_dirs_info():
-#     text = str(check_directory())
-#     if text == 'Все необходимые папки - созданы!':
-#         showinfo(title='Отчет о выполнении', message=text)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# def rename_files_info():
-#     text = str(rename_file_by_folder_name(file_path_regions))
-#     if text == 'Файлы переименованы.':
-#         showinfo(title='Отчет о выполнении', message=text,
-#                  icon=INFO, default=OK)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# def replace_files_info():
-#     text = str(replace_files(file_path_regions))
-#     if text == fr'Файлы скопированы в "C:\{group_dir}".':
-#         showinfo(title='Отчет о выполнении', message=text,
-#                  icon=INFO, default=OK)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# def check_sheets_info():
-#     text = str(check_sheets())
-#     if text == 'Проверка листов, выполнена. Ошибки не обнаружены!':
-#         showinfo(title='Отчет о выполнении', message=text,
-#                  icon=INFO, default=OK)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# def cheak_head_of_table_info():
-#     text = str(cheak_head_of_table(LEN_OF_HEAD))
-#     if text == f'Проверка выполнена! Ошибок нет.':
-#         showinfo(title='Отчет о выполнении', message=text,
-#                  icon=INFO, default=OK)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# def file_dir_merge_info():
-#     text = str(file_dir_merge(file_path))
-#     if text == 'Слияние выполнено!':
-#         showinfo(title='Отчет о выполнении', message=text,
-#                  icon=INFO, default=OK)
-#     else:
-#         showerror(title='Отчет о выполнении', message=text)
-#
-#
-# rst_check_button = customtkinter.CTkButton(master=root,
-#                                            text='Проверить папки',
-#                                            command=check_dirs_info,
-#                                            fg_color='green')
-# rst_check_button.grid(row=0, column=0, padx=20, pady=(20, 10))
-# m_file_manager_button = customtkinter.CTkButton(master=root,
-#                                                 text='Переименовать файлы',
-#                                                 command=rename_files_info)
-# m_file_manager_button.grid(row=1, column=0, padx=20, pady=(10, 10))
-# rr_file_manager_button = customtkinter.CTkButton(master=root,
-#                                                  text='Переместить файлы',
-#                                                  command=replace_files_info)
-# rr_file_manager_button.grid(row=2, column=0, padx=20, pady=(10, 10))
-# seccond_file_manager_button = customtkinter.CTkButton(master=root,
-#                                                       text='Проверить листы файла',
-#                                                       command=check_sheets_info)
-# seccond_file_manager_button.grid(row=3, column=0, padx=20, pady=(10, 10))
-# third_file_manager_button = customtkinter.CTkButton(master=root,
-#                                                     text='Проверить шапку файла',
-#                                                     command=cheak_head_of_table_info)
-# third_file_manager_button.grid(row=4, column=0, padx=20, pady=(10, 10))
-# mm_file_manager_button = customtkinter.CTkButton(master=root,
-#                                                  text='Слияние',
-#                                                  command=file_dir_merge_info)
-# mm_file_manager_button.grid(row=5, column=0, padx=20, pady=(10, 10))
-#
-# root.mainloop()
 
 
 class App(customtkinter.CTk):
@@ -137,7 +50,7 @@ class App(customtkinter.CTk):
         self.seccond_history_button.grid(row=1, column=0, padx=20, pady=(10, 10))
         self.first_file_manager_button = customtkinter.CTkButton(self.tabview.tab('Менеджер файлов'),
                                                                  text='Переместить файлы',
-                                                                 command=self.replace_files_info)
+                                                                 command=self.rename_and_replace_info)
         self.first_file_manager_button.grid(row=0, column=0, padx=20, pady=(10, 10))
         self.seccond_file_manager_button = customtkinter.CTkButton(self.tabview.tab('Менеджер файлов'),
                                                                    text='Проверить листы файла',
@@ -151,10 +64,11 @@ class App(customtkinter.CTk):
                                                                   text='Слияние файлов',
                                                                   command=self.file_dir_merge_info)
         self.fourth_file_manager_button.grid(row=4, column=0, padx=20, pady=(10, 10))
-        self.fourth_5_file_manager_button = customtkinter.CTkButton(self.tabview.tab('Менеджер файлов'),
-                                                                    text='переименовать файлы',
-                                                                    command=self.rename_files_info)
-        self.fourth_5_file_manager_button.grid(row=5, column=0, padx=20, pady=(10, 10))
+        self.clean_files_and_dirs_button = customtkinter.CTkButton(self.tabview.tab('Менеджер файлов'),
+                                                                   text='Удалить файлы и папки',
+                                                                   command=self.clean_dir_info,
+                                                                   fg_color='red')
+        self.clean_files_and_dirs_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
     def check_dirs_info(self):
         text = str(check_directory())
@@ -195,19 +109,17 @@ class App(customtkinter.CTk):
         else:
             showerror(title='Отчет о выполнении', message=text)
 
-    def replace_files_info(self):
-        text = str(replace_files(file_path_regions))
+    def rename_and_replace_info(self):
+        text = str(rename_and_replace(file_path_regions))
         if text == fr'Файлы скопированы в "C:\{group_dir}".':
             showinfo(title='Отчет о выполнении', message=text,
                      icon=INFO, default=OK)
-        else:
-            showerror(title='Отчет о выполнении', message=text)
-
-    def rename_files_info(self):
-        text = str(rename_file_by_folder_name(file_path_regions))
-        if text == 'Файлы переименованы.':
-            showinfo(title='Отчет о выполнении', message=text,
-                     icon=INFO, default=OK)
+        elif text == 'Файлы уже переименованы':
+            showwarning(title='Отчет о выполнении', message=text)
+        elif text == (fr'Файлы скопированы в "C:\{group_dir}".'
+                      fr' '
+                      fr'Есть файлы в fr"C:\{group_dir}\{xls_files}"'):
+            showwarning(title='Отчет о выполнении', message=text)
         else:
             showerror(title='Отчет о выполнении', message=text)
 
@@ -218,6 +130,15 @@ class App(customtkinter.CTk):
                      icon=INFO, default=OK)
         else:
             showerror(title='Отчет о выполнении', message=text)
+
+    def clean_dir_info(self):
+        text = str(clean_dirs())
+        if text == 'Все файлы и папки удалены!':
+            showinfo(title='Отчет о выполнении', message=text,
+                     icon=INFO, default=OK)
+        else:
+            showerror(title='Отчет о выполнении', message=text)
+
 
 
 if __name__ == "__main__":

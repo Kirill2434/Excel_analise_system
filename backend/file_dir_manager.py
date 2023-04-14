@@ -103,7 +103,6 @@ def replace_files(path):
     all_files_duplicate = []
     try:
         for file_dir in os.listdir(path):
-            print(file_dir)
             # вывод наименование файлов в папках
             for file_name in os.listdir(fr'{file_path_regions}\{file_dir}'):
                 if file_name.split('.')[-1] == 'xlsx':
@@ -138,3 +137,45 @@ def replace_files(path):
 
 # print(rename_file_by_folder_name(file_path_regions))
 # print(replace_files(file_path_regions))
+
+def rename_and_replace(path):
+    for file in os.listdir(fr'C:\{group_dir}\{xlsx_file}'):
+        if ('после' or 'до') in file.split(' ')[1]:
+            return 'Файлы уже переименованы'
+    rename_file_by_folder_name(path)
+    replace_files(path)
+    for file in os.listdir(fr'C:\{group_dir}\{xls_files}'):
+        if len(file) != 0:
+            return fr'Файлы скопированы в "C:\{group_dir}".' \
+                   fr' ' \
+                   fr'Есть файлы в fr"C:\{group_dir}\{xls_files}"'
+        else:
+            pass
+    return fr'Файлы скопированы в "C:\{group_dir}".'
+
+
+def clean_dirs():
+    try:
+        for file_dir in os.listdir(fr'{file_path_regions}'):
+            os.rmdir(fr'{file_path_regions}\{file_dir}')
+        for file in os.listdir(fr'C:\{group_dir}\{xlsx_file}'):
+            os.remove(fr'C:\{group_dir}\{xlsx_file}\{file}')
+        for file in os.listdir(fr'C:\{group_dir}\{xls_files}'):
+            os.remove(fr'C:\{group_dir}\{xls_files}\{file}')
+    except FileNotFoundError:
+        return 'Все файлы и папки удалены!'
+    except OSError:
+        for file_dir in os.listdir(fr'{file_path_regions}'):
+            for file_name in os.listdir(fr'{file_path_regions}\{file_dir}'):
+                os.remove(fr'{file_path_regions}\{file_dir}\{file_name}')
+            os.rmdir(fr'{file_path_regions}\{file_dir}')
+        for file in os.listdir(fr'C:\{group_dir}\{xlsx_file}'):
+            os.remove(fr'C:\{group_dir}\{xlsx_file}\{file}')
+        for file in os.listdir(fr'C:\{group_dir}\{xls_files}'):
+            os.remove(fr'C:\{group_dir}\{xls_files}\{file}')
+        return 'Все файлы и папки удалены!'
+    return 'Все файлы и папки удалены!'
+
+
+# print(rename_and_replace(file_path_regions))
+# print(clean_dirs())
