@@ -68,7 +68,6 @@ def check_sheets(*, sheet_name: str = 'Лист1'):
     """Функция по провекре листов, на несоответсвие наименованию листа по умолчанию
     выводит отчет с именем неккоректного файла и наименованиями его листов.
 
-    :param paths: путь к файлам
     :param sheet_name: наименование листа по умолчанию
     :return: 'текст' или сообщение об ошибке
     """
@@ -92,6 +91,7 @@ def check_sheets(*, sheet_name: str = 'Лист1'):
 # print(check_sheets(all_files))
 
 
+# @timemometr
 def cheak_head_of_table(sum_of_head: int, *, sheet_name: str = 'Лист1'):
     """Функция проверяет шапку таблицы на соответсвие заданным параметрам, в аргументах мы указываем путь до файлов
     и численный диапазон, который представляет из себя эталанную численную шапку, с которой мы сравниваем шапки
@@ -131,4 +131,5 @@ def cheak_head_of_table(sum_of_head: int, *, sheet_name: str = 'Лист1'):
     else:
         return f'Проверка выполнена! Ошибок нет.'
 
-# print(cheak_head_of_table(all_files, 36))
+
+# print(head_of_table(36))

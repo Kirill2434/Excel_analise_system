@@ -2,10 +2,12 @@ import tkinter.messagebox
 import customtkinter
 from tkinter.messagebox import showinfo, INFO, OK, showerror, showwarning
 
+
 from backend.check_system import check_source_data, check_directory, check_sheets, cheak_head_of_table
 from backend.file_dir_manager import rename_and_replace, clean_dirs
 from backend.file_merge import file_dir_merge
 from backend.row_counter import row_merger
+from backend.utils import timemometr
 from settings import resurs_path, main_path, LEN_OF_HEAD, file_path_regions, group_dir, file_path, xls_files
 
 customtkinter.set_appearance_mode("System")
@@ -93,6 +95,7 @@ class App(customtkinter.CTk):
         else:
             showerror(title='Отчет о выполнении', message=text)
 
+
     def cheak_head_of_table_info(self):
         text = str(cheak_head_of_table(LEN_OF_HEAD))
         if text == f'Проверка выполнена! Ошибок нет.':
@@ -123,8 +126,9 @@ class App(customtkinter.CTk):
         else:
             showerror(title='Отчет о выполнении', message=text)
 
+    @timemometr
     def file_dir_merge_info(self):
-        text = str(file_dir_merge(file_path))
+        text = file_dir_merge(file_path)
         if text == 'Слияние выполнено!':
             showinfo(title='Отчет о выполнении', message=text,
                      icon=INFO, default=OK)
@@ -138,7 +142,6 @@ class App(customtkinter.CTk):
                      icon=INFO, default=OK)
         else:
             showerror(title='Отчет о выполнении', message=text)
-
 
 
 if __name__ == "__main__":

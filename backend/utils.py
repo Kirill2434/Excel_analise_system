@@ -4,9 +4,25 @@ import glob
 import openpyxl as op
 import pandas as pd
 from pathlib import Path
+
 from pandas import ExcelWriter
 
+from settings import file_path
 
+
+def timemometr(func):
+    from time import time
+
+    def wrapper(*args):
+        start_time = time()
+        value = func(*args)
+        end_time = time()
+        print(f'Время выполнения функции {end_time-start_time} сек.')
+        return value
+    return wrapper
+
+
+# @timemometr
 def record_to_excel(obj, report_name, sheet_name):
     """Универсальная функция записи результатов выполнения различных
     проверок и действий в других модулях проекта.
@@ -65,6 +81,7 @@ def record_to_excel(obj, report_name, sheet_name):
     return 'Запись в файл выполнена'
 
 
+# @timemometr
 def head_of_table(path, sheet_name: str = 'Лист1'):
     """Функция определяет расположение числовой шапки и возвращает координаты её начала,
     есть возможность вернуть значения этой шапки.
@@ -146,19 +163,27 @@ def head_of_table(path, sheet_name: str = 'Лист1'):
                 except ValueError:
                     pass
         # получаем всю строку с шапкой по полученному индексу
-        for row in ws.iter_rows(min_row=index_of_head_row, max_row=index_of_head_row):
-            try:
-                for cell in row:
-                    if cell.value is None:
-                        pass
-                    else:
-                        # и записываем эту строчку в список
-                        head_of_file.append(cell.value)
-            except ValueError:
-                miss_files.append(file_name)
-                return miss_files
-        result = {tuple(head_row_col_index): head_of_file}
-        return result
+        # for row in ws.iter_rows(min_row=index_of_head_row, max_row=index_of_head_row):
+        #     try:
+        #         for cell in row:
+        #             if cell.value is None:
+        #                 pass
+        #             else:
+        #                 # и записываем эту строчку в список
+        #                 head_of_file.append(cell.value)
+        #     except ValueError:
+        #         miss_files.append(file_name)
+        #         return miss_files
+        # result = {tuple(head_row_col_index): head_of_file}
+        return head_row_col_index
 
-# for k, v in head_of_table(r'C:\Приложения регионов_исход\3_14.03.2023 после 11\7200.xlsx').items():
-#     print(k, v)
+
+@timemometr
+def n():
+    l = []
+    for v in file_path:
+        l.append(head_of_table(v))
+    return l
+
+
+print(n())

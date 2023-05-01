@@ -1,69 +1,55 @@
 import os
 
-import cython as cython
 import pandas as pd
 import openpyxl as op
-
-from pathlib import Path
+from pyexcelerate import Workbook
 
 from backend.check_system import head_of_table
-from settings import group_dir, xlsx_file
+from backend.utils import timemometr
+from settings import group_dir, xlsx_file, file_path
 
 
+@timemometr
 def file_dir_merge(sheet_name: str = 'Лист1'):
     """Функция объединяет файлы ориентируясь на числовую шапку файла.
 
-    :param path: путь к файлам
     :param sheet_name: имя лста
     :return: 'текст'
     """
     single_file_list = []
-    all_files_list = []
-    single_file_dictionary = {}
     for file in os.listdir(fr'C:\{group_dir}\{xlsx_file}'):
         try:
-            df = pd.ExcelFile(fr'C:\{group_dir}\{xlsx_file}\{file}')
-            file_name = Path(df).name
             head = head_of_table(fr'C:\{group_dir}\{xlsx_file}\{file}', sheet_name)
+            # head = {(10, 1): []}
         except Exception as error:
             return f'Ошибка: {error}. ' \
                    f'Не получается прочитать файл!'
         for row_col_ind, head in head.items():
-            wb = op.load_workbook(fr'C:\{group_dir}\{xlsx_file}\{file}')
+            wb = op.load_workbook(fr'C:\{group_dir}\{xlsx_file}\{file}', read_only=True)
             # проверяем лист на его корректность
             try:
                 ws = wb[sheet_name]
             # если указанного листа не существует, переходим на активный лист
             except KeyError:
                 ws = wb.active
-            try:
-                for row in ws.iter_rows(min_col=row_col_ind[1], min_row=row_col_ind[0] + 1, values_only=True):
-                    single_file_dictionary[row_col_ind[1]] = row
-                    for cell_k, cell_v in single_file_dictionary.items():
-                        single_file_dictionary[row_col_ind[1]] = cell_v
-                        df = pd.DataFrame.from_dict(single_file_dictionary,
-                                                    orient='index',
-                                                    dtype='str')
-                        df['Файл источник'] = file_name
-                        # формируем список с данными одного файла
-                        single_file_list.append(df)
-            except Exception as error:
-                return f'Ошибка: {error}. ' \
-                       f'Не получается сформировать список!'
-    try:
-        # объединяем данные одного файла в один DataFrame
-        df = pd.concat(single_file_list)
-        # добавляем каждый целостный DataFrame в общий список
-        all_files_list.append(df)
-        # сливаем все DataFrame-мы общего списка в один DataFrame
-        final_mer = pd.concat(all_files_list)
-        final_mer.to_excel(r'C:\generation_results\НБО_свод.xlsx',
-                           sheet_name='Финал',
-                           index=False)
-    except Exception as error:
-        return f'Ошибка: {error}. ' \
-               f'Не получается записать в excel!'
+            for ind, row in enumerate(ws.iter_rows(min_col=row_col_ind[1],
+                                                   min_row=row_col_ind[0] + 1,
+                                                   values_only=True)):
+                print(row)
+                single_file_list.append(row)
+
+    main_df = pd.DataFrame(single_file_list,
+                           dtype='object')
+    # main_df.to_pickle(r'C:\generation_results\НБО_свод.pkl')
+    values = [main_df.columns] + list(main_df.values)
+    wb = Workbook()
+    wb.new_sheet('Финал', data=values)
+    wb.save(r'C:\generation_results\НБО_свод.xlsx')
     return 'Слияние выполнено!'
 
 
-# print(file_dir_merge(file_path))
+print(file_dir_merge())
+
+
+# def new_reader_excel(path):
+#     pass
