@@ -7,7 +7,7 @@ from pathlib import Path
 
 from pandas import ExcelWriter
 
-from settings import file_path
+# from settings import file_path
 
 
 def timemometr(func):
@@ -163,27 +163,27 @@ def head_of_table(path, sheet_name: str = 'Лист1'):
                 except ValueError:
                     pass
         # получаем всю строку с шапкой по полученному индексу
-        # for row in ws.iter_rows(min_row=index_of_head_row, max_row=index_of_head_row):
-        #     try:
-        #         for cell in row:
-        #             if cell.value is None:
-        #                 pass
-        #             else:
-        #                 # и записываем эту строчку в список
-        #                 head_of_file.append(cell.value)
-        #     except ValueError:
-        #         miss_files.append(file_name)
-        #         return miss_files
-        # result = {tuple(head_row_col_index): head_of_file}
-        return head_row_col_index
+        for row in ws.iter_rows(min_row=index_of_head_row, max_row=index_of_head_row):
+            try:
+                for cell in row:
+                    if cell.value is None:
+                        pass
+                    else:
+                        # и записываем эту строчку в список
+                        head_of_file.append(cell.value)
+            except ValueError:
+                miss_files.append(file_name)
+                return miss_files
+        result = {tuple(head_row_col_index): head_of_file}
+        return result
 
 
-@timemometr
-def n():
-    l = []
-    for v in file_path:
-        l.append(head_of_table(v))
-    return l
+# @timemometr
+# def n():
+#     l = []
+#     for v in file_path:
+#         l.append(head_of_table(v))
+#     return l
+#
 
-
-print(n())
+# print(n())

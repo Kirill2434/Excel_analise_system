@@ -23,7 +23,7 @@ class App(customtkinter.CTk):
         self.label = customtkinter.CTkLabel(self, text='Основное меню',
                                             font=customtkinter.CTkFont(size=16, weight='normal'))
         self.label.place(relx=0.5, rely=0.05, anchor=tkinter.CENTER)
-        self.label_version = customtkinter.CTkLabel(self, text='version 0.3',
+        self.label_version = customtkinter.CTkLabel(self, text='version 0.4.2',
                                                     font=customtkinter.CTkFont(size=12, weight='normal'))
         self.label_version.place(relx=0.85, rely=0.92, anchor=tkinter.CENTER)
         self.tabview = customtkinter.CTkTabview(self, width=350)
@@ -126,7 +126,7 @@ class App(customtkinter.CTk):
         else:
             showerror(title='Отчет о выполнении', message=text)
 
-    @timemometr
+    # @timemometr
     def file_dir_merge_info(self):
         text = file_dir_merge(file_path)
         if text == 'Слияние выполнено!':

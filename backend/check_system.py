@@ -111,10 +111,12 @@ def cheak_head_of_table(sum_of_head: int, *, sheet_name: str = 'Лист1'):
             file_name = Path(df).name
             try:
                 for row_col_ind, head in head_of_table(fr'C:\{group_dir}\{xlsx_file}\{file}', sheet_name).items():
-                    if head == sum_of_head:
-                        pass
-                    else:
+                    if head != sum_of_head:
                         final_dict[file_name] = head
+                    elif row_col_ind != (10, 1):
+                        final_dict[file_name] = row_col_ind
+                    else:
+                        pass
             except ValueError:
                 unreadable_file.append(fr'C:\{group_dir}\{xlsx_file}\{file}')
                 record_to_excel(unreadable_file, 'НЕ ЧИТИЕМЫЕ ФАЙЛЫ', 'Не читаемые файлы')
