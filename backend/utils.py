@@ -21,7 +21,6 @@ def timemometr(func):
         return value
     return wrapper
 
-
 # @timemometr
 def record_to_excel(obj, report_name, sheet_name):
     """Универсальная функция записи результатов выполнения различных

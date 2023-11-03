@@ -48,4 +48,4 @@ def analise_and_editing_columns(file, column_inx, min_row):
     return 'Проверка закончена'
 
 
-print(analise_and_editing_columns(resurse_path, [12, 13, 14, 15], 2))
+# print(analise_and_editing_columns(resurse_path, [12, 13, 14, 15], 2))

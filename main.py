@@ -23,7 +23,7 @@ class App(customtkinter.CTk):
         self.label = customtkinter.CTkLabel(self, text='Основное меню',
                                             font=customtkinter.CTkFont(size=16, weight='normal'))
         self.label.place(relx=0.5, rely=0.05, anchor=tkinter.CENTER)
-        self.label_version = customtkinter.CTkLabel(self, text='version 0.4.2',
+        self.label_version = customtkinter.CTkLabel(self, text='version 0.4.3',
                                                     font=customtkinter.CTkFont(size=12, weight='normal'))
         self.label_version.place(relx=0.85, rely=0.92, anchor=tkinter.CENTER)
         self.tabview = customtkinter.CTkTabview(self, width=350)
@@ -95,7 +95,6 @@ class App(customtkinter.CTk):
         else:
             showerror(title='Отчет о выполнении', message=text)
 
-
     def cheak_head_of_table_info(self):
         text = str(cheak_head_of_table(LEN_OF_HEAD))
         if text == f'Проверка выполнена! Ошибок нет.':
@@ -105,7 +104,7 @@ class App(customtkinter.CTk):
             showerror(title='Отчет о выполнении', message=text)
 
     def merge_files_info(self):
-        text = str(row_merger(resurs_path, main_path, 'СВОД'))
+        text = str(row_merger(main_path, resurs_path, 'СВОД'))
         if text == 'Программа выполнена':
             showinfo(title='Отчет о выполнении', message=text,
                      icon=INFO, default=OK)
